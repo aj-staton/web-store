@@ -15,7 +15,7 @@ export class ProductService {
   database = firebase.firestore();
   ref = firebase.database().ref('menus/');
   private eventSubject = new Subject<any>();
-  usertype="visitor";
+  usertype:string = "visitor";
 
   public products:Array<any>= [];
   
@@ -41,7 +41,7 @@ export class ProductService {
     }
     else{
       this.database.collection("products").where("uid", "==", firebase.auth().currentUser.uid)
-     .onSnapshot(function(querySnapshot) {
+       .onSnapshot(function(querySnapshot) {
            console.log("items list changed........owner");
            self.products = [];
            querySnapshot.forEach(function(doc) {
@@ -67,22 +67,18 @@ export class ProductService {
       'description' : description,
       'uid' : uid
     });*/
-    if (firebase.auth().currentUser !=  null){
+    // Only the owner shoulf be able to create products.
+    if (this.usertype == "owner") {
       uid=firebase.auth().currentUser.uid
       console.log(uid, " :****** uid");
-    }
-    else{
-      console.log(" no user logged in, no item created")
-    }
-    // Do we need both??
-    var db = firebase.firestore();
-    db.collection("products").add({
-      'name': name,
-      'price': price,
-      'category': category,
-      'image': image,
-      'description': description,
-      'uid': uid
+      var db = firebase.firestore();
+      db.collection("products").add({
+        'name': name,
+        'price': price,
+        'category': category,
+        'image': image,
+        'description': description,
+        'uid': uid
     })
     .then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);
@@ -92,6 +88,9 @@ export class ProductService {
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
+    } else{
+      console.log(" no user logged in, no item created")
+    }
   }
 
   getProducts():any {
@@ -117,6 +116,43 @@ export class ProductService {
     this.eventSubject.next(data);
   }
 
+  setUsertype(type:string){
+
+    var self=this;
+    this.usertype = type;
+    console.log("Usertype set as: " + type);
+    if (this.usertype == "visitor"){
+       this.database.collection("products")
+         .onSnapshot(function(querySnapshot) {
+            console.log("items list changed...........");
+            self.products = [];
+            querySnapshot.forEach(function(doc) {
+                var product = doc.data();
+                self.products.push({name:product.name , price:product.price, category:product.category, image:product.image, uid:product.uid})
+            });
+            // self.events.publish('dataloaded',Date.now());
+            self.publishEvent({
+                  foo: 'bar'
+              });
+            console.log("items reloaded");
+        } );
+    }
+    else{
+     this.database.collection("items").where("uid", "==", firebase.auth().currentUser.uid)
+      .onSnapshot(function(querySnapshot) {
+        console.log("items list changed...........");
+        self.products = [];
+        querySnapshot.forEach(function(doc) {
+          var product = doc.data();
+          self.products.push({name:product.name , price:product.price, category:product.category, image:product.image, uid:product.uid});
+        });
+        // self.events.publish('dataloaded',Date.now());
+        self.publishEvent({
+            foo: 'bar'
+        });
+    });
+  }
+  }
 }
 
 export const snapshotToArray = snapshot => {

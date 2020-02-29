@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from '../product.service';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-product-list',
@@ -22,6 +23,17 @@ export class ProductListPage implements OnInit {
   }
   // TODO: finish this function. 
   logout() {
-    console.log("user is logged out");
+    var self=this;
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+      console.log("user logged out");
+      self.router.navigate(["/tabs/product-list"]);
+    }).catch(function(error) {
+      // An error happened.
+      console.log("A logout error occurred.")
+    });
+
+      //reset usertype to visitor
+    this.productService.setUsertype("visitor");
   }
 }

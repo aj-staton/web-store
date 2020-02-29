@@ -9,9 +9,8 @@ import { Router,ActivatedRoute } from '@angular/router';
 })
 export class SignupPage implements OnInit {
 
-  user={
-  email:"",
-  password:""};
+  user={email:"",password:""};
+  usertype = "visitor";
 
   constructor(private router:Router) { }
 
@@ -25,25 +24,23 @@ export class SignupPage implements OnInit {
   	var self=this;
 
   	firebase.auth().createUserWithEmailAndPassword(email, password).catch(
-  		function(error) {
-	  // Handle Errors here.
-	  console.log(error);
-	  var errorCode = error.code;
-	  var errorMessage = error.message;
-	  console.log(error.message);
-	  if(errorCode.length > 0){
-	  	console.log("Failed");
-	  }
-	  else{
-	  	console.log("signup ok")
-	  }
-	  // ...
+  	  function(error) {
+	    // Handle Errors here.
+	    console.log(error);
+	    var errorCode = error.code;
+	    var errorMessage = error.message;
+	    console.log(error.message);
+	    if(errorCode.length > 0){
+	  	  console.log("Failed");
+	    }
+	    else{
+	  	  console.log("signup ok")
+	    }
 	}).then(function(user){
 		  	console.log("finished creating account")
 		  	// self.router.navigate(["/login"]);
-		  	self.router.navigate(["/home"]);
+		  	self.router.navigate(["/tabs/product-list"]);
 	});
-
 
   }
 
