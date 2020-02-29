@@ -1,0 +1,38 @@
+<ion-toolbar>
+  <ion-buttons slot="primary">
+    <ion-button color="primary" href='/tabs/product-list'>
+      <ion-icon color="dark" slot="icon-only" name="arrow-round-back"></ion-icon> 
+    </ion-button>
+  </ion-buttons>
+  <ion-title color="dark"> Add Product </ion-title>
+</ion-toolbar>
+
+<ion-content>
+  <form [formGroup]='add_product_form' (submit)="addProduct(add_product_form.value)">
+    <ion-item>
+      <ion-label color="primary">Name</ion-label>
+      <ion-input type="text" formControlName="name" required></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label>Category</ion-label>
+        <ion-select multiple="false" placeholder="Select One" formControlName="category">
+          <ion-select-option value="Food">Food</ion-select-option>
+          <ion-select-option value="Drinks">Drinks</ion-select-option>
+          <ion-select-option value="Toys">Toys</ion-select-option>
+        </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary">Price</ion-label>
+      <ion-input type="number" formControlName="price" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary">Local Image URL</ion-label>
+      <ion-input type="text" formControlName="image" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary">Description</ion-label>
+      <ion-input type="text" formControlName="description" required></ion-input>
+    </ion-item>
+    <ion-button class="submit-btn" expand="block" type="submit">Add</ion-button>
+  </form>
+</ion-content>

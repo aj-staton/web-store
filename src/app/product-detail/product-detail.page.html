@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Product Details</ion-title>
+  </ion-toolbar>
+  <ion-buttons slot="primary">
+    <ion-button color="primary" href='/tabs/product-list'>
+      <ion-icon color="dark" slot="icon-only" name="arrow-round-back"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-button (click)="placeOrder()" expand="full" color="primary" fill="solid" slot="end">
+      Order
+    </ion-button>
+    <ion-item>
+      <ion-label> Order Quantity</ion-label>
+      <ion-range min="1" max="50" color="primary" step="1">
+        <ion-label slot="start">1</ion-label>
+        <ion-label slot="end">50</ion-label>
+      </ion-range>
+    </ion-item>
+
+    <ion-item>
+      <ion-label> Name: </ion-label>
+      <ion-label color="primary"> {{ currentProduct.name }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label> Category: </ion-label>
+      <ion-label color="primary"> {{ currentProduct.category }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label> Price: </ion-label>
+      <ion-label color="primary"> {{ currentProduct.price }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label> Image Path: </ion-label>
+      <ion-label color="primary"> {{ currentProduct.image }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label> Description: </ion-label>
+      <ion-label color="primary"> {{ currentProduct.description }}</ion-label>
+    </ion-item>
+  </ion-list> 
+</ion-content>

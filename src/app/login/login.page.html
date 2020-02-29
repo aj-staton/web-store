@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+    <ion-buttons slot="end">
+      <ion-button href='/signup'> Signup </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="padding">
+
+<ion-img [src]="imgfile"></ion-img>
+
+
+<form [formGroup]="new_product_form" (submit)="login(new_product_form.value)">
+    <ion-item>
+      <ion-label color="primary" position="floating">Email</ion-label>
+      <ion-input type="text" formControlName="email" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" position="floating">Password</ion-label>
+      <ion-input type="text" formControlName="password" required></ion-input>
+    </ion-item>
+
+    <ion-button class="submit-btn" expand="block" type="submit" [disabled]="!new_product_form.valid">Login</ion-button>
+  </form>
+
+  <ion-item>
+  	<ion-grid>
+  		<ion-button class="submit-btn" (click)="loginFacebook()">Facebook Login</ion-button>
+  		<ion-button class="submit-btn" (click)="loginGoogle()">Google Login</ion-button>
+  	</ion-grid>
+  </ion-item>
+
+</ion-content>

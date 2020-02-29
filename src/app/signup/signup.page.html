@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-button slot="end" href="/login"> BACK </ion-button>
+    <ion-title>Sign Up</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="padding">
+
+    <ion-item>
+      <ion-label color="primary" position="floating">Email</ion-label>
+      <ion-input type="text" [(ngModel)]="user.email" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" position="floating">Password</ion-label>
+      <ion-input type="text" [(ngModel)]="user.password" required></ion-input>
+    </ion-item>
+
+    <ion-button class="submit-btn" expand="block" type="submit" (click)="signup()">Sign Up</ion-button>
+
+</ion-content>

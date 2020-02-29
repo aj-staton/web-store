@@ -1,5 +1,7 @@
 {
   "name": "GamecockStore",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
