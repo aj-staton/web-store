@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { Events } from '@ionic/angular';
 
-import { Observable } from 'rxjs';
-import {Subject} from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -21,6 +20,7 @@ export class ProductService {
   
   constructor(private router:Router) {
     this.database.collection("products");
+    var storage = firebase.storage();
     var self=this;
 
     if (this.usertype == "visitor") {
@@ -36,11 +36,11 @@ export class ProductService {
             self.publishEvent({
                foo: 'bar'
            });
-           console.log("items reloaded");
+           console.log("products reloaded");
        } );
     }
     else{
-      this.database.collection("products").where("uid", "==", firebase.auth().currentUser.uid)
+      this.database.collection("products")
        .onSnapshot(function(querySnapshot) {
            console.log("items list changed........owner");
            self.products = [];
@@ -58,7 +58,7 @@ export class ProductService {
   }
   
   createProduct(name:string, price:number, category:string,
-                image:string, description:string, uid: string){
+                image:string, description:string){
     /*this.products.push({
       'name': name,
       'price': price,
@@ -69,7 +69,7 @@ export class ProductService {
     });*/
     // Only the owner shoulf be able to create products.
     if (this.usertype == "owner") {
-      uid=firebase.auth().currentUser.uid
+      let uid=firebase.auth().currentUser.uid;
       console.log(uid, " :****** uid");
       var db = firebase.firestore();
       db.collection("products").add({
@@ -93,13 +93,25 @@ export class ProductService {
     }
   }
 
+  deleteProduct(product: any){
+    var self = this;
+    var db = firebase.firestore();
+    var docRef = 
+    db.collection("products").doc(product.uid).delete().then(function() {
+        console.log("Product successfully deleted!");
+    }).catch(function(error) {
+        console.error("Error removing Product: ", error);
+    });
+
+  }
+
   getProducts():any {
-    //return this.products;
     var itemsObservable = new Observable(observer => {
       setTimeout(() => {
           observer.next(this.products);
       }, 1000);
     });
+    
     return itemsObservable;
   }
 
@@ -124,7 +136,7 @@ export class ProductService {
     if (this.usertype == "visitor"){
        this.database.collection("products")
          .onSnapshot(function(querySnapshot) {
-            console.log("items list changed...........");
+            console.log("product list changed...........");
             self.products = [];
             querySnapshot.forEach(function(doc) {
                 var product = doc.data();
@@ -138,9 +150,9 @@ export class ProductService {
         } );
     }
     else{
-     this.database.collection("items").where("uid", "==", firebase.auth().currentUser.uid)
+     this.database.collection("products").where("uid", "==", firebase.auth().currentUser.uid)
       .onSnapshot(function(querySnapshot) {
-        console.log("items list changed...........");
+        console.log("product list changed...........");
         self.products = [];
         querySnapshot.forEach(function(doc) {
           var product = doc.data();

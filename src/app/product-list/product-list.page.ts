@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from '../product.service';
+import { OrderService } from '../order.service';
 import * as firebase from 'firebase';
 
 @Component({
@@ -12,9 +13,14 @@ export class ProductListPage implements OnInit {
   products = [];
   
   constructor(private router:Router,
-          public productService: ProductService) { }
+          public productService: ProductService,
+          private orderService: OrderService) { }
 
   ngOnInit() {
+    this.productService.getObservable().subscribe((data) =>
+    {
+      this.products = this.productService.getProducts();
+    });
     this.products = this.productService.getProducts();
   }
   
@@ -33,7 +39,11 @@ export class ProductListPage implements OnInit {
       console.log("A logout error occurred.")
     });
 
-      //reset usertype to visitor
+    // Reset usertype to visitor
     this.productService.setUsertype("visitor");
+    // Clear the orders so when the user logs out,
+    //  they no longer see thier orders.
+    this.orderService.orders = [];
+
   }
 }

@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Product Details</ion-title>
+    <ion-button (click)='presentConfirm()' slot="end" color="primary">DELETE PRODUCT</ion-button>
   </ion-toolbar>
   <ion-buttons slot="primary">
     <ion-button color="primary" href='/tabs/product-list'>
@@ -12,17 +13,16 @@
 
 <ion-content>
   <ion-list>
-    <ion-button (click)="placeOrder()" expand="full" color="primary" fill="solid" slot="end">
+    <ion-button (click)="placeOrder(currentProduct, quantity)" expand="full" color="primary" fill="solid" slot="end">
       Order
     </ion-button>
     <ion-item>
       <ion-label> Order Quantity</ion-label>
-      <ion-range min="1" max="50" color="primary" step="1">
+      <ion-range [(ngModel)]="quantity" min="1" max="50" color="primary" step="1">
         <ion-label slot="start">1</ion-label>
         <ion-label slot="end">50</ion-label>
       </ion-range>
     </ion-item>
-
     <ion-item>
       <ion-label> Name: </ion-label>
       <ion-label color="primary"> {{ currentProduct.name }}</ion-label>

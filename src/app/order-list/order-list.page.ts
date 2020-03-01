@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
 import { OrderService } from '../order.service';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-order-list',
@@ -14,7 +16,11 @@ export class OrderListPage implements OnInit {
           public orderService: OrderService) { }
 
   ngOnInit() {
-    this.orders = this.orderService.getProducts();
+    this.orderService.getObservable().subscribe((data) =>
+    {
+      this.orders = this.orderService.getOrders();
+    });
+    this.orders = this.orderService.getOrders();
   }
   
   toOrder(order) {

@@ -51,14 +51,15 @@ export class LoginPage implements OnInit {
 		console.log(errorCode);
 
 		if (errorCode === 'auth/wrong-password') {
-            alert('Wrong password.');
-        } else if (errorCode === 'auth/user-not-found'){
+			alert('Wrong password.');
+			this.router.navigate('/login');
+        } else if (errorCode === 'auth/user-not-found') {
             alert("User does not exist");
         }
           console.log(error);
 		}
 	).then(function(result){
-    var user= firebase.auth().currentUser;
+    var user = firebase.auth().currentUser;
     console.log("login succeeded");
 	console.log(user.uid);
 		

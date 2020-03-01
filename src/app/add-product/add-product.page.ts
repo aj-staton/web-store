@@ -16,7 +16,7 @@ export class AddProductPage implements OnInit {
   constructor( 
     private router: Router,
     public formBuilder: FormBuilder,
-    public productService: ProductService) {
+    private productService: ProductService) {
   }
 
   ngOnInit() {
@@ -25,13 +25,14 @@ export class AddProductPage implements OnInit {
       category: new FormControl('', Validators.required),
       price: new FormControl('', Validators.required),
       image:new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required),
-      uid: firebase.auth().currentUser.uid
+      description: new FormControl('', Validators.required)
     });
   }
 
-  addProduct(value){
-    this.productService.createProduct(value.name, value.price, value.category, value.image, value.description, value.uid);
+  addProduct(value) {
+    if (firebase.auth().currentUser != null) {
+      this.productService.createProduct(value.name, value.price, value.category, value.image, value.description);
+    }
     this.router.navigate(['/tabs/product-list']);
   }
 }
