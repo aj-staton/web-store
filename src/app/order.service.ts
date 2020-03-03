@@ -93,14 +93,12 @@ export class OrderService {
 
   deleteOrder(order: any){
     var self = this;
-    var db = firebase.firestore();
-    db.collection("orders").doc(order.uid).delete().then(function() {
+    this.database.collection("orders").doc(order.uid).delete().then(function() {
         console.log("Document successfully deleted!");
-        self.router.navigate(["/tabs/order-list"]);
     }).catch(function(error) {
         console.error("Error removing document: ", error);
     });
-
+    
   }
 
   getObservable(): Subject<any> {

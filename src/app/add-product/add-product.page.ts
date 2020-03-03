@@ -27,12 +27,19 @@ export class AddProductPage implements OnInit {
       image:new FormControl('', Validators.required),
       description: new FormControl('', Validators.required)
     });
+    console.log("User is a: " + this.productService.usertype);
   }
 
   addProduct(value) {
-    if (firebase.auth().currentUser != null) {
+    if (this.productService.usertype == "owner") {
       this.productService.createProduct(value.name, value.price, value.category, value.image, value.description);
     }
     this.router.navigate(['/tabs/product-list']);
   }
+
+  loginAsOwner() {
+    this.productService.usertype = "owner";
+    console.log("You are now a store " +
+      this.productService.usertype);
+    }
 }

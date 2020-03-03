@@ -39,7 +39,7 @@ export class SignupPage implements OnInit {
 	}).then(function(user){
 		  	console.log("finished creating account")
 		  	// self.router.navigate(["/login"]);
-		  	self.router.navigate(["/tabs/product-list"]);
+		  	self.router.navigate(["/login"]);
 	});
 
   }

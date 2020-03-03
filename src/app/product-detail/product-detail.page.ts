@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { OrderService } from '../order.service';
+import { ProductService } from '../product.service';
 import { AlertController } from '@ionic/angular';
 import * as firebase from 'firebase';
+import { AngularFirestoreDocument } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,9 +15,10 @@ export class ProductDetailPage implements OnInit {
 
   currentProduct = null;
   quantity:number = 0; // The ion-range 
+  productDoc: AngularFirestoreDocument;
 
   constructor(private route: ActivatedRoute, private router: Router,
-    private orderService: OrderService,
+    private orderService: OrderService, private productService: ProductService,
     private alertCtrl: AlertController) { }
 
   ngOnInit() {
@@ -29,9 +32,20 @@ export class ProductDetailPage implements OnInit {
     this.router.navigate(['/tabs/product-list']);
   }
 
-  deleteProduct() {
-    this.orderService.deleteOrder(this.currentProduct);
-    this.router.navigate(["/tabs/product-list"]);
+  deleteProduct(): void {
+    if (this.productService.usertype == "owner") {
+      console.log(this.currentProduct.uid +" is to be deleted.");
+      this.productService.deleteProduct(this.currentProduct.uid);
+    } else {
+      console.log("You do not have the correct permissions.");
+    }
+    this.router.navigate(['/tabs/product-list']);
+  }
+  
+  loginAsOwner() {
+    this.productService.usertype = "owner";
+    console.log("You are now a store " +
+      this.productService.usertype);
   }
 
   async presentConfirm() {

@@ -14,7 +14,7 @@ export class ProductService {
   database = firebase.firestore();
   ref = firebase.database().ref('menus/');
   private eventSubject = new Subject<any>();
-  usertype:string = "visitor";
+  usertype:string = "";
 
   public products:Array<any>= [];
   
@@ -22,39 +22,22 @@ export class ProductService {
     this.database.collection("products");
     var storage = firebase.storage();
     var self=this;
-
-    if (this.usertype == "visitor") {
-      this.database.collection("products")
-      .onSnapshot(function(querySnapshot) {
-          console.log("product list changed.......visitor");
+ 
+    this.database.collection("products")
+       .onSnapshot(function(querySnapshot) {
+          console.log("items list retrieved from firebase");
           self.products = [];
           querySnapshot.forEach(function(doc) {
-            let product = doc.data();
-            self.products.push({name:product.name, price:product.price, category:product.category, 
-              image:product.image, description:product.description, uid:product.uid});
-           });
-            self.publishEvent({
-               foo: 'bar'
-           });
-           console.log("products reloaded");
-       } );
-    }
-    else{
-      this.database.collection("products")
-       .onSnapshot(function(querySnapshot) {
-           console.log("items list changed........owner");
-           self.products = [];
-           querySnapshot.forEach(function(doc) {
-               var product = doc.data();
-               self.products.push({name:product.name , price:product.price, category:product.category, image:product.image, uid:product.uid})
-           });
+          var product = doc.data();
+          self.products.push({name:product.name , price:product.price, category:product.category, image:product.image, uid:product.uid})
+        });
 
-           self.publishEvent({
-               foo: 'bar'
-           });
-           console.log("Products Reloaded");
-       } );
-    }
+        self.publishEvent({
+          foo: 'bar'
+        });
+    console.log("Products Reloaded");
+    } );
+    
   }
   
   createProduct(name:string, price:number, category:string,
@@ -89,20 +72,18 @@ export class ProductService {
       console.error("Error adding document: ", error);
     });
     } else{
-      console.log(" no user logged in, no item created")
+      console.log("User does not have owner privileges.");
     }
   }
 
-  deleteProduct(product: any){
-    var self = this;
-    var db = firebase.firestore();
-    var docRef = 
-    db.collection("products").doc(product.uid).delete().then(function() {
-        console.log("Product successfully deleted!");
+  deleteProduct(id){
+    var self=this;
+    this.database.collection("products").doc(id).delete().then(function() {
+      console.log("Document successfully deleted!");
+      self.router.navigate(["/tabs/product-list"]);
     }).catch(function(error) {
-        console.error("Error removing Product: ", error);
-    });
-
+      console.error("Error removing document: ", error);
+    }); 
   }
 
   getProducts():any {
@@ -113,11 +94,6 @@ export class ProductService {
     });
     
     return itemsObservable;
-  }
-
-  deleteItem(id:any) {
-    let newInfo = firebase.database().ref('menus/'+id).remove();
-    console.log("Item deleted:"+id)
   }
 
   getObservable(): Subject<any> {

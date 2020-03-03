@@ -79,7 +79,8 @@ export class LoginPage implements OnInit {
 	});
   }
 
-  loginFacebook(){
+ 
+  loginFacebook() {
   	// You need to create a facebook developer account, then register an app there
   	// to use its login service.
   	var self=this;
