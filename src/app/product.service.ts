@@ -78,7 +78,7 @@ export class ProductService {
 
   deleteProduct(id){
     var self=this;
-    this.database.collection("products").doc(id).delete().then(function() {
+    self.database.collection("products").doc(id).delete().then(function() {
       console.log("Document successfully deleted!");
       self.router.navigate(["/tabs/product-list"]);
     }).catch(function(error) {

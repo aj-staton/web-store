@@ -1,13 +1,13 @@
 
 <ion-toolbar>
   <ion-buttons slot="primary">
-    <ion-button color="primary" href='/login'>
+    <ion-button color="primary" (click)='toLogin()'>
       <ion-icon color="dark" slot="icon-only" name="log-in"></ion-icon>
     </ion-button>
     <ion-button color="primary" (click)='logout()'>
       <ion-icon color="dark" slot="icon-only" name="log-out"></ion-icon>
     </ion-button>
-    <ion-button color="primary" href='/add-product'>
+    <ion-button color="primary" (click)="toAddProduct()">
       <ion-icon color="dark" slot="icon-only" name="add"></ion-icon>
     </ion-button>
   </ion-buttons>

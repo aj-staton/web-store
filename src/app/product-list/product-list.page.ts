@@ -23,7 +23,13 @@ export class ProductListPage implements OnInit {
     });
     this.products = this.productService.getProducts();
   }
-  
+  // NOTE: Inline hrefs don't work with cordova. Must use these functions.
+  toLogin() {
+    this.router.navigate(['/login']);
+  }
+  toAddProduct() {
+    this.router.navigate(['/add-product']);
+  }
   toProduct(product) {
     this.router.navigate(['/product-detail', product]);
   }

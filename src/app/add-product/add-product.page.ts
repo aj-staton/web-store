@@ -29,17 +29,24 @@ export class AddProductPage implements OnInit {
       name: new FormControl('', Validators.required),
       category: new FormControl('', Validators.required),
       price: new FormControl('', Validators.required),
-      image:new FormControl('', Validators.required),
+      //image:new FormControl('', Validators.required),
       description: new FormControl('', Validators.required)
     });
     console.log("User is a: " + this.productService.usertype);
   }
-
-  addProduct(value) {
-    if (this.productService.usertype == "owner") {
-      this.productService.createProduct(value.name, value.price, value.category, value.image, value.description);
-    }
+  goBack() {
     this.router.navigate(['/tabs/product-list']);
+  }
+  addProduct(value) {
+    var self = this;
+    if (this.productService.usertype == "owner") {
+      firebase.storage().ref().child(this.imgfile).getDownloadURL().then(function(path){
+        self.productService.createProduct(value.name, value.price, value.category, path, value.description);
+      });
+      this.router.navigate(['/tabs/product-list']);
+    } else {
+      console.log("You are not an owner.");
+    }
   }
 
   loginAsOwner() {
@@ -47,7 +54,7 @@ export class AddProductPage implements OnInit {
     console.log("You are now a store " +
       this.productService.usertype);
   }
-
+  /*
   async takePicture() {
     const options: CameraOptions = {
       quality: 40,
@@ -57,14 +64,13 @@ export class AddProductPage implements OnInit {
     };
 
     try {
-      console.log(this);
       let cameraInfo = await this.camera.getPicture(options);
       let blobInfo = await this.makeFileIntoBlob(cameraInfo);
-      let uploadInfo: any = await this.uploadToFirebase(blobInfo);
-      console.log(uploadInfo);
+      //let uploadInfo: any = await this.uploadToFirebase(blobInfo);
+      //console.log(uploadInfo);
       // let url:any = uploadInfo.ref.getDownloadURL();
-      alert("File Upload Success " + uploadInfo);
-      this.imgfile = uploadInfo;
+      alert("File Upload Success ");// + uploadInfo);
+      //this.imgfile = uploadInfo;
       
     } catch (e) {
       console.log(e.message);
@@ -106,11 +112,6 @@ export class AddProductPage implements OnInit {
         .catch(e => reject(e));
     });
   }
-
-  /**
-   *
-   * @param _imageBlobInfo
-   */
   uploadToFirebase(_imageBlobInfo) {
     console.log("uploadToFirebase");
     return new Promise((resolve, reject) => {
@@ -145,5 +146,34 @@ export class AddProductPage implements OnInit {
         }
       );
     });
+  }
+*/
+  async takePicturee() {
+    try {
+      const options: CameraOptions = {
+        quality: 40,
+        targetHeight: 400,
+        targetWidth: 400,
+        destinationType: this.camera.DestinationType.DATA_URL, // Gets back a Base64 Image
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE
+      }
+      const img = await this.camera.getPicture(options);
+      const formatted_img = `data:image/jpeg;base64,${img}`;
+      this.imgfile = this.getImageReference();
+      const picStorage = firebase.storage().ref(this.imgfile);
+      // Write to db.
+      picStorage.putString(formatted_img, 'data_url');
+    } catch(e) {
+      console.error(e);
+    }
+  }
+  /*
+   * Creates a unique number to retireve the image from in 'addProduct()'
+   */
+  getImageReference(): string {
+    let num = Math.floor((Math.random() * 100000000)+1);
+    let ret:string = "i:" + num as string;
+    return ret;
   }
 }

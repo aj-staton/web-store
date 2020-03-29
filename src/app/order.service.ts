@@ -144,6 +144,18 @@ export class OrderService {
     
   }
 
+  deleteOtherOrder(id:string){
+    var self = this;
+    var db = firebase.firestore();
+    console.log(id);
+    db.collection("other-orders").doc(<string>id).delete().then(function() {
+        console.log("Document successfully deleted!");
+    }).catch(function(error) {
+        console.error("Error removing document: ", error);
+    });
+    
+  }
+
   getObservable(): Subject<any> {
     return this.eventSubject;
   }

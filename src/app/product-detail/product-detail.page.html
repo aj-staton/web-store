@@ -4,7 +4,7 @@
     <ion-button (click)='presentConfirm()' slot="end" color="primary">DELETE PRODUCT</ion-button>
   </ion-toolbar>
   <ion-buttons slot="primary">
-    <ion-button color="primary" href='/tabs/product-list'>
+    <ion-button color="primary" (click)="goBack()">
       <ion-icon color="dark" slot="icon-only" name="arrow-round-back"></ion-icon>
     </ion-button>
   </ion-buttons>

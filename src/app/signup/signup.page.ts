@@ -16,7 +16,9 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {
   }
-
+  goBack() {
+	  this.router.navigate(["/login"]);
+  }
   signup(){
   	console.log(this.user.email+"  "+this.user.password)
   	var email=this.user.email;

@@ -1,9 +1,9 @@
 <ion-toolbar>
   <ion-buttons slot="primary">
-    <ion-button (click)='takePicture()' color="primary">
+    <ion-button (click)='takePicturee()' color="primary">
       <ion-icon color="dark" slot="icon-only" name="camera"></ion-icon> 
     </ion-button>
-    <ion-button slot ="end" color="primary" href='/tabs/product-list'>
+    <ion-button slot ="end" color="primary" (click)=goBack()>
       <ion-icon color="dark" slot="icon-only" name="arrow-round-back"></ion-icon> 
     </ion-button>
   </ion-buttons>
@@ -28,10 +28,10 @@
       <ion-label color="primary">Price</ion-label>
       <ion-input type="number" formControlName="price" required></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label color="primary">Local Image URL</ion-label>
+    <!--<ion-item>
+      <ion-label color="primary">Image URL</ion-label>
       <ion-input type="text" formControlName="image" required></ion-input>
-    </ion-item>
+    </ion-item>-->
     <ion-item>
       <ion-label color="primary">Description</ion-label>
       <ion-input type="text" formControlName="description" required></ion-input>

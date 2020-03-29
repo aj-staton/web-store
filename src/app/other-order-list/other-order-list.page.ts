@@ -11,7 +11,7 @@ import * as firebase from 'firebase';
 })
 export class OtherOrderListPage implements OnInit {
   otherOrders = this.orderService.otherOrders;
-  constructor(private orderService: OrderService) { 
+  constructor(private orderService: OrderService, private router: Router) { 
   }
 
   ngOnInit() {
@@ -22,5 +22,8 @@ export class OtherOrderListPage implements OnInit {
   }
   seeOrders() {
     console.log(this.otherOrders)
+  }
+  toOtherOrder(order) {
+    this.router.navigate(['/other-order-detail', order]);
   }
 }

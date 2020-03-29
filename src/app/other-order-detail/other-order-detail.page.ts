@@ -8,15 +8,14 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
 
 
 @Component({
-  selector: 'app-order-detail',
-  templateUrl: './order-detail.page.html',
-  styleUrls: ['./order-detail.page.scss'],
+  selector: 'app-other-order-detail',
+  templateUrl: './other-order-detail.page.html',
+  styleUrls: ['./other-order-detail.page.scss'],
 })
-export class OrderDetailPage implements OnInit {
+export class OtherOrderDetailPage implements OnInit {
 
   currentOrder = null;
   database = firebase.firestore();
-  //ref = firebase.database().ref('orders/');
 
   constructor(private route: ActivatedRoute, 
     private orderService: OrderService,
@@ -32,7 +31,7 @@ export class OrderDetailPage implements OnInit {
     );
   }
   goBack() {
-    this.router.navigate(['/tabs/order-list']);
+    this.router.navigate(['/tabs/other-order-list']);
   }
   deleteOrder() {
     console.log(this.currentOrder.id);

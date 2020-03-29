@@ -28,7 +28,9 @@ export class ProductDetailPage implements OnInit {
       }
     );
   }
-
+  goBack() {
+    this.router.navigate(['/tabs/product-list']);
+  }
   
   placeOrder() {
     // Write to the DB.
