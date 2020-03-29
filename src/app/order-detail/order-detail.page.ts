@@ -4,6 +4,7 @@ import { OrderService } from '../order.service';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import * as firebase from 'firebase';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class OrderDetailPage implements OnInit {
 
   currentOrder = null;
   database = firebase.firestore();
-  ref = firebase.database().ref('menus/');
+  //ref = firebase.database().ref('orders/');
 
   constructor(private route: ActivatedRoute, 
     private orderService: OrderService,
@@ -23,11 +24,18 @@ export class OrderDetailPage implements OnInit {
     private alertCtrl: AlertController) { }
 
   ngOnInit() {
-    this.currentOrder = this.route.snapshot.params;
+    this.route.params.subscribe(
+      param => {
+        this.currentOrder = param;
+        console.log(param.id);
+      }
+    );
   }
 
   deleteOrder() {
-    this.orderService.deleteOrder(this.currentOrder);
+    console.log(this.currentOrder.id);
+
+    this.orderService.deleteOrder(this.currentOrder.id);
     this.router.navigate(["/tabs/product-list"]);
   }
 

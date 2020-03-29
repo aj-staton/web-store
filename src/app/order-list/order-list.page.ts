@@ -26,4 +26,8 @@ export class OrderListPage implements OnInit {
   toOrder(order) {
     this.router.navigate(['/order-detail', order]);
   }
+
+  placeOrder() {
+    this.orderService.placeOrder();
+  }
 }

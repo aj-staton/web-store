@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title color= "dark">Order Details</ion-title>
+    <ion-title color= "dark">Cart Item Detail</ion-title>
     <ion-button (click)='presentConfirm()' slot="end" color="primary">
-      DELETE ORDER
+      DELETE FROM CART
     </ion-button>
   </ion-toolbar>
   <ion-buttons slot="primary">
@@ -19,20 +19,12 @@
       <ion-label color="primary"> {{ currentOrder.name }}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label> User: </ion-label>
-      <ion-label color="primary"> {{ currentOrder.uid }}</ion-label>
-    </ion-item>
-    <ion-item>
       <ion-label> Number {{ currentOrder.name }}(s) Ordered: </ion-label>
       <ion-label color="primary"> {{ currentOrder.quantity }}</ion-label>
     </ion-item>
     <ion-item>
       <ion-label> Order Total: </ion-label>
       <ion-label color="primary"> ${{ currentOrder.total }}</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label> Date of Order: </ion-label>
-      <ion-label color="primary"> {{ currentOrder.date }}</ion-label>
     </ion-item>
   </ion-list> 
 </ion-content>

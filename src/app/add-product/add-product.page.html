@@ -1,6 +1,9 @@
 <ion-toolbar>
   <ion-buttons slot="primary">
-    <ion-button color="primary" href='/tabs/product-list'>
+    <ion-button (click)='takePicture()' color="primary">
+      <ion-icon color="dark" slot="icon-only" name="camera"></ion-icon> 
+    </ion-button>
+    <ion-button slot ="end" color="primary" href='/tabs/product-list'>
       <ion-icon color="dark" slot="icon-only" name="arrow-round-back"></ion-icon> 
     </ion-button>
   </ion-buttons>

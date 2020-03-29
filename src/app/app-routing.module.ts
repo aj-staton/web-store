@@ -33,6 +33,10 @@ const routes: Routes = [
   {
     path: 'signup',
     loadChildren: () => import('./signup/signup.module').then( m => m.SignupPageModule)
+  },
+  {
+    path: 'other-order-list',
+    loadChildren: () => import('./other-order-list/other-order-list.module').then( m => m.OtherOrderListPageModule)
   }
 ];
 @NgModule({

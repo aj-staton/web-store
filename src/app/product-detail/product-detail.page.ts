@@ -22,7 +22,11 @@ export class ProductDetailPage implements OnInit {
     private alertCtrl: AlertController) { }
 
   ngOnInit() {
-    this.currentProduct = this.route.snapshot.params;
+    this.route.params.subscribe(
+      param => {
+        this.currentProduct = param;
+      }
+    );
   }
 
   
@@ -32,10 +36,16 @@ export class ProductDetailPage implements OnInit {
     this.router.navigate(['/tabs/product-list']);
   }
 
+  placeInCart() {
+    // Write to the DB.
+    this.orderService.addToCart(this.currentProduct, this.quantity);
+    this.router.navigate(['/tabs/product-list']);
+  }
+
   deleteProduct(): void {
     if (this.productService.usertype == "owner") {
-      console.log(this.currentProduct.uid +" is to be deleted.");
-      this.productService.deleteProduct(this.currentProduct.uid);
+      console.log(this.currentProduct.id +" is to be deleted.");
+      this.productService.deleteProduct(this.currentProduct.id);
     } else {
       console.log("You do not have the correct permissions.");
     }

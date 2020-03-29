@@ -1,16 +1,17 @@
 <ion-toolbar>
-  <ion-title color="dark"> Order List </ion-title>
+  <ion-title color="dark"> Your Shopping Cart </ion-title>
+  <ion-button (click)="placeOrder()" slot="end"> Place Order </ion-button>
 </ion-toolbar>
 
 <ion-content class="padding">
   <!-- List of all orders from the service. -->
     <ion-list>
       <ion-item *ngFor="let item of (orders | async)" (click)="toOrder(item)">
-        <div class="row" slot="end"> Date: {{ item.date }} </div>
-        <div class="row" slot="start"> {{ item.name }} </div>
+        <!-- <div class="row" slot="end"> Date: {{ item.date }} </div>-->
+        <div class="row" slot="start"> Item: {{ item.name }} </div>
         <div class="row" slot="start"> Quantity: {{ item.quantity }}</div>
         <div class="row" slot="end"> ${{ item.total }} </div>
-        <div class="row" slot="start"> UID: {{ item.uid }} </div>
+        <!--<div class="row" slot="start"> UID: {{ item.uid }} </div>-->
       </ion-item>
     </ion-list>
   

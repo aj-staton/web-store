@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="padding">
+  <ion-list>
+    <ion-item *ngFor="let item of otherOrders">
+      <div class="row" slot="start"> Items: {{ item.items }} </div>
+      <div class="row"> Total Quantity: {{ item.numItems }} </div>
+      <div class="row" slot="end"> Total Price: ${{ item.orderTotal }} </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -29,7 +29,7 @@ export class ProductService {
           self.products = [];
           querySnapshot.forEach(function(doc) {
           var product = doc.data();
-          self.products.push({name:product.name , price:product.price, category:product.category, image:product.image, uid:product.uid})
+          self.products.push({name:product.name , price:product.price, category:product.category, image:product.image, uid:product.uid, id:product.id})
         });
 
         self.publishEvent({

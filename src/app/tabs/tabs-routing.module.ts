@@ -28,6 +28,16 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'other-order-list',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('../other-order-list/other-order-list.module').then(m => m.OtherOrderListPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/product-list', // Maybe this is /tabs/productlist?
         pathMatch: 'full'
