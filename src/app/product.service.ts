@@ -4,6 +4,8 @@ import { Events } from '@ionic/angular';
 
 import { Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { strictEqual } from 'assert';
+import { fromDocRef } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +43,7 @@ export class ProductService {
   }
   
   createProduct(name:string, price:number, category:string,
-                image:string, description:string){
+                image:string, description:string, id){
     /*this.products.push({
       'name': name,
       'price': price,
@@ -55,8 +57,11 @@ export class ProductService {
       let uid=firebase.auth().currentUser.uid;
       console.log(uid, " :****** uid");
       var db = firebase.firestore();
+
+      let validated_name:string = validateUserInput(name);
+
       db.collection("products").add({
-        'name': name,
+        'name': validated_name,
         'price': price,
         'category': category,
         'image': image,
@@ -75,7 +80,23 @@ export class ProductService {
       console.log("User does not have owner privileges.");
     }
   }
-
+  updateProductPrice(name, this_price) {
+    var self=this;
+    var my_id = "";
+    self.database.collection("products").where("name", "==", <string>name)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+            my_id = doc.id // There is only one of each name.
+            self.database.collection("products").doc(doc.id).update({price: this_price});
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+  }
   deleteProduct(id){
     var self=this;
     self.database.collection("products").doc(id).delete().then(function() {
@@ -154,4 +175,23 @@ export const snapshotToArray = snapshot => {
   });
 
   return returnArr;
+}
+
+function validateUserInput(input: string): string {
+  if (input.includes("ugly")) {
+    let regex = /ugly/gi;
+    return input.replace(regex,"Sanitzed");
+  } else if (input.includes("messy")) {
+    let regex = /messy/gi;
+    return input.replace(regex,"Sanitzed");
+  } else if (input.includes("trash")) {
+    let regex = /trash/gi;
+    return input.replace(regex,"Sanitzed");
+  } else if (input.includes("body")) {
+    let regex = /body/gi;
+    return input.replace(regex,"Sanitzed");
+  } else {
+    console.log(input + " was validated.");
+    return input;
+  }
 }

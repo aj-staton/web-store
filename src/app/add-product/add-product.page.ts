@@ -37,11 +37,12 @@ export class AddProductPage implements OnInit {
   goBack() {
     this.router.navigate(['/tabs/product-list']);
   }
+  
   addProduct(value) {
     var self = this;
     if (this.productService.usertype == "owner") {
       firebase.storage().ref().child(this.imgfile).getDownloadURL().then(function(path){
-        self.productService.createProduct(value.name, value.price, value.category, path, value.description);
+        self.productService.createProduct(value.name, value.price, value.category, path, value.description, value.id);
       });
       this.router.navigate(['/tabs/product-list']);
     } else {
@@ -65,7 +66,7 @@ export class AddProductPage implements OnInit {
 
     try {
       let cameraInfo = await this.camera.getPicture(options);
-      let blobInfo = await this.makeFileIntoBlob(cameraInfo);
+      let blobInfo = await this.makeFileIntoBlob(cameraInfo);val
       //let uploadInfo: any = await this.uploadToFirebase(blobInfo);
       //console.log(uploadInfo);
       // let url:any = uploadInfo.ref.getDownloadURL();

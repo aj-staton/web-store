@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Update</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class='padding'>
+  <ion-item>
+    <ion-label> New Price: </ion-label>
+    <ion-input type="number" value="0" [(ngModel)]='newprice'></ion-input>
+  </ion-item>
+  <ion-button (click)=updateProduct()> Submit </ion-button>
+</ion-content>

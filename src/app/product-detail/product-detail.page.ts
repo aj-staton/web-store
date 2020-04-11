@@ -27,11 +27,14 @@ export class ProductDetailPage implements OnInit {
         this.currentProduct = param;
       }
     );
+    console.log("Current Product is: " + this.currentProduct.name);
   }
   goBack() {
     this.router.navigate(['/tabs/product-list']);
   }
-  
+  toUpdateProduct() {
+    this.router.navigate(['/update-product', this.currentProduct]);
+  }
   placeOrder() {
     // Write to the DB.
     this.orderService.makeOrder(this.currentProduct, this.quantity);
