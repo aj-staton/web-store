@@ -33,11 +33,10 @@ export class OtherOrderDetailPage implements OnInit {
   goBack() {
     this.router.navigate(['/tabs/other-order-list']);
   }
-  deleteOrder() {
-    console.log(this.currentOrder.id);
-
-    this.orderService.deleteOrder(this.currentOrder.id);
-    this.router.navigate(["/tabs/product-list"]);
+  
+  deleteOtherOrder() {
+    this.orderService.deleteOtherOrder(this.currentOrder.id);
+    this.router.navigate(['tabs/other-order-list']);
   }
 
   async presentConfirm() {
@@ -55,7 +54,8 @@ export class OtherOrderDetailPage implements OnInit {
           text: 'Yes',
           handler: () => {
             console.log('Yes clicked');
-            this.deleteOrder();
+            this.deleteOtherOrder();
+            this.router.navigate(['/other-order-list']);
           }
         }
       ]

@@ -18,40 +18,28 @@ export class OrderService {
 
 
   constructor(private router:Router, private productService: ProductService) {
-    //this.database.collection("orders");
     var self=this;
-    // Load the Cart
-    //if (firebase.auth().currentUser == null) {
-     // console.log('Please log in to view your orders.');
-   // }
-    //else{
       this.database.collection("orders")//.where("uid", "==", firebase.auth().currentUser.uid)
       .onSnapshot(function(querySnapshot) {
-          //console.log("Showing user: " + firebase.auth().currentUser.uid + " orders");
           self.orders = [];
           querySnapshot.forEach(function(doc) {
             let order = doc.data();
             self.orders.push({name:order.name, quantity:order.quantity, 
-              total:order.total, id:doc.id});
+              total:order.total, id:doc.id, uid:order.uid});
            });
             self.publishEvent({
                foo: 'bar'
            });
            console.log("Orders reloaded");
        } );    
-  //  }
-  
-    //if (firebase.auth().currentUser == null) {
-     // console.log('Please log in to view your orders.');
-   // }
-    //else{
+
     this.database.collection("other-orders")//.where("uid", "==", firebase.auth().currentUser.uid)
     .onSnapshot(function(querySnapshot) {
-        //console.log("Showing user: " + firebase.auth().currentUser.uid + " orders");
         self.otherOrders = [];
         querySnapshot.forEach(function(doc) {
         let otherOrder = doc.data();
-          self.otherOrders.push(otherOrder);
+          self.otherOrders.push({items:otherOrder.items, numItems:otherOrder.numItems, 
+            orderTotal:otherOrder.orderTotal, id:doc.id, uid:otherOrder.uid});
         });
         self.publishEvent({
           foo: 'bar'
@@ -71,10 +59,12 @@ export class OrderService {
       db.collection("other-orders").add({
         'name': name,
         'quantity': quantity,
-        'total': total as number
+        'total': total as number,
+        'uid':uid
       })
       .then(function(docRef) {
         console.log("Document written with ID: ", docRef.id);
+        console.log("UID:" + uid);
     })
     .catch(function(error) {
       console.error("Error adding document: ", error);
@@ -85,10 +75,12 @@ export class OrderService {
   }
   createInCart(name:string, quantity:number,total:number){
       var db = firebase.firestore();
+      let uid = firebase.auth().currentUser.uid;
       db.collection("orders").add({
         'name': name,
         'quantity': quantity,
-        'total': total as number
+        'total': total as number,
+        'uid': uid
       })
       .then(function(docRef) {
         console.log("Document written with ID: ", docRef.id);
@@ -149,7 +141,7 @@ export class OrderService {
     var db = firebase.firestore();
     console.log(id);
     db.collection("other-orders").doc(<string>id).delete().then(function() {
-        console.log("Document successfully deleted!");
+        console.log("Document successfully deleted from the orders!");
     }).catch(function(error) {
         console.error("Error removing document: ", error);
     });
@@ -180,10 +172,12 @@ export class OrderService {
     });
     // Write the array to the REAL orders collection other-orders.
     var db = firebase.firestore();
+    let uid=firebase.auth().currentUser.uid;
       db.collection("other-orders").add({
         'numItems':numItems,
         'orderTotal':totalPrice,
-        'items':itemList
+        'items':itemList,
+        'uid':uid
       })
       .then(function(docRef) {
         console.log("Document written with ID: ", docRef.id);

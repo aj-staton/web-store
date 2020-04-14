@@ -18,7 +18,7 @@
 <!-- List of all products from this page.ts. -->
   <ion-list>
     <ion-item *ngFor="let item of (products | async)" (click)="toProduct(item)">
-      <ion-img style="width: 25px; height: 25px;" [src]="item.image" slot="start"></ion-img>
+      <ion-img style="width: 25px; height: 25px;" [src]="item.thumbnail" slot="start"></ion-img>
       {{item.name}}
       <div class="row" slot="end"> {{item.category}} </div>
       <div class="row" slot="end"> ${{item.price}} </div>

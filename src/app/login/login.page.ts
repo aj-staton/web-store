@@ -116,5 +116,10 @@ export class LoginPage implements OnInit {
 	self.router.navigate(["/home"]);
 	});
   }
-
+  goBack() {
+	  this.router.navigate(['/tabs/product-list'])
+  }
+  toSignup() {
+	  this.router.navigate(['/signup']);
+  }
 }

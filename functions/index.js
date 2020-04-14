@@ -1,7 +1,16 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+
 admin.initializeApp();
 
+const path = require ('path');
+const sharp = require ('sharp');
+const uuidv4 = require('uuid/v4');
+const uuid = uuidv4();
+const gcs = admin.storage();
+
+const THUMB_MAX_WIDTH = 200;
+const THUMB_MAX_HEIGHT = 200;
 // Listens for new produts added to /products/ and creates a
 // sanitized version of the product.
 // Moderates messages by lowering all uppercase messages and removing swearwords
@@ -10,69 +19,72 @@ const badWordsFilter = new Filter();
 badWordsFilter.addWords('ugly', 'messy', 'trash','body');
 
 // Moderates messages by lowering all uppercase messages and removing swearwords.
-exports.moderator = functions.database.ref('products/{messageId}').onWrite((change) => {
-  var message = change.after.val();
-
-  if (message && !message.sanitized) {
-    // Retrieved the message values.
-    console.log('Retrieved message content: ', message);
-
-    // Run moderation checks on on the message and moderate if needed.
-    const moderatedMessage = moderateMessage(message.text);
-
-    // Update the Firebase DB with checked message.
-    console.log('Message has been moderated. Saving to DB: ', moderatedMessage);
-    return change.after.ref.update({
-      text: moderatedMessage,
-      sanitized: true,
-      moderated: message.text !== moderatedMessage,
-    });
-  }
-  return null;
+exports.moderator = functions.firestore.document('products/{id}').onCreate((snapshot, context) => {
+  var data = snapshot.data();
+  var input = data.name;
+  if (input.includes("ugly")) {
+    var regex = /ugly/gi;
+    input = input.replace(regex,"****");
+  } else if (input.includes("messy")) {
+    var regex1 = /messy/gi;
+    input = input.replace(regex1,"*****");
+  } else if (input.includes("trash")) {
+    var regex2 = /trash/gi;
+    input = input.replace(regex2,"*****");
+  } else if (input.includes("body")) {
+    var regex3 = /body/gi;
+    input = input.replace(regex3,"****");
+  } else {
+    console.log(input + " was validated.");
+  } 
+  data.name = input;
+  return snapshot.ref.set(data)
 });
 
-// Moderates the given message if appropriate.
-function moderateMessage(message) {
+exports.updateItem = functions.firestore
+    .document('products/{productId}')
+    .onUpdate((change, context) => {
+  
+      var newValue = change.after.data();
+      //console.log(newValue.price + "NEW PRICE");
+      var previousValue = change.before.data();
+      
+      if (newValue.price < previousValue.price/2) {
+        newValue.price = previousValue.price/2;
+        console.log("Too low; only halving the price::: " + newValue.price);
+      }
+      return change.after.ref.set(newValue);
+});
 
-  // Moderate if the user uses SwearWords.
-  if (containsSwearwords(message)) {
-    console.log('User is swearing. moderating...');
-    message = moderateSwearwords(message);
-  }
+exports.generateThumbnail = functions.storage.object().onFinalize((object) => {
+  const fileBucket = object.bucket; 
+  const filePath = object.name; 
+  const contentType = object.contentType; 
 
-  return message;
-}
-
-// Returns true if the string contains swearwords.
-function containsSwearwords(message) {
-  return message !== badWordsFilter.clean(message);
-}
-
-// Hide all swearwords. e.g: Crap => ****.
-function moderateSwearwords(message) {
-  return badWordsFilter.clean(message);
-}
-
-
-
-
-/*
-exports.generateThumbnail = functions.storage.object().onFinalize(async (object) => {
-  const fileBucket = object.bucket; // The Storage bucket that contains the file.
-  const filePath = object.name; // File path in the bucket.
-  const contentType = object.contentType; // File content type.
-  const metageneration = object.metageneration; // Number of times metadata has been generated. New objects have a value of 1.
-
-  //do thumbnail image generation by 
-
-  // Get the file name.
   const fileName = path.basename(filePath);
   // Exit if the image is already a thumbnail.
-  if (fileName.startsWith('thumb_')) {
-    return console.log('Already a Thumbnail.');
+  if (fileName.startsWith('thumb')) {
+    console.log('Already a Thumbnail.');
+    return null;
   }
-  else{
-    // call image manipulation software to generate a thumbnail image
-  }
+
+  const bucket = gcs.bucket(fileBucket);
+
+  const thumbFileName = `thumb${fileName}`;
+  const thumbFilePath = path.join(path.dirname(filePath), thumbFileName);
+  const thumbnailUploadStream = bucket.file(thumbFilePath).createWriteStream({
+    metadata : { 
+      contentType : contentType,
+      metadata : {
+      firebaseStorageDownloadTokens: uuid
+    }
+  }});
+
+  const store = sharp();
+  store.resize(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT,{fit: 'inside', withoutEnlargement: true }).pipe(thumbnailUploadStream);
+
+  bucket.file(filePath).createReadStream().pipe(store);
+
+  return new Promise((resolve, reject) =>
+      thumbnailUploadStream.on('finish', resolve).on('error', reject));
 });
-*/

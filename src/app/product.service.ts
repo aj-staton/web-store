@@ -31,7 +31,8 @@ export class ProductService {
           self.products = [];
           querySnapshot.forEach(function(doc) {
           var product = doc.data();
-          self.products.push({name:product.name , price:product.price, category:product.category, image:product.image, uid:product.uid, id:product.id})
+          console.log(product.image);
+          self.products.push({name:product.name , price:product.price, category:product.category, image:product.image, uid:product.uid, id:doc.id, thumbnail:product.thumbnail})
         });
 
         self.publishEvent({
@@ -43,30 +44,23 @@ export class ProductService {
   }
   
   createProduct(name:string, price:number, category:string,
-                image:string, description:string, id){
-    /*this.products.push({
-      'name': name,
-      'price': price,
-      'category': category,
-      'image' : image,
-      'description' : description,
-      'uid' : uid
-    });*/
+                image:string, description:string, id, thumbnail){
     // Only the owner shoulf be able to create products.
     if (this.usertype == "owner") {
       let uid=firebase.auth().currentUser.uid;
       console.log(uid, " :****** uid");
       var db = firebase.firestore();
 
-      let validated_name:string = validateUserInput(name);
-
+      //let validated_name:string = validateUserInput(name);
+      
       db.collection("products").add({
-        'name': validated_name,
+        'name': name,
         'price': price,
         'category': category,
         'image': image,
         'description': description,
-        'uid': uid
+        'uid': uid,
+        'thumbnail':thumbnail
     })
     .then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);
