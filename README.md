@@ -7,7 +7,7 @@ On top of basic naviagation, services, and state management, these are some of t
  * Added authenication features, including some for Google and Facebook login.
  * Integrated a camera with `cordova` plugins. This allows a user to upload an image thumbnail alongside product within the store.
  * Developed some backend functions for: content management, filtering, security, and image sizing.
-curity
+
 ## Dependancies
 To resolve toolchain dependancies:
  * `Node.js` (I used v12.16.2)
