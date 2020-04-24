@@ -8,7 +8,7 @@ On top of basic naviagation, services, and state management, these are some of t
  * Integrated a camera with `cordova` plugins. This allows a user to upload an image thumbnail alongside product within the store.
  * Developed some backend functions for: content management, filtering, security, and image sizing.
 curity
-## Dependancies Web
+## Dependancies
 To resolve toolchain dependancies:
  * `Node.js` (I used v12.16.2)
  * The ionic toolchain; installed on debian-based linux with `npm install -g @ionic/cli`
