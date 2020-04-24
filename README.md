@@ -1,5 +1,5 @@
 # WebStore
-This app is was my introduction to App/Web Developement. It is a make-shift e-commerce application built with the [Ionic UI Framework](https://ionicframework.com) and integrated with Angular. 
+This app is was my introduction to App/Web Developement. It is a makeshift e-commerce application built with the [Ionic UI Framework](https://ionicframework.com) and integrated with Angular. 
 
 ## Major Accomplishments
 On top of basic naviagation, services, and state management, these are some of the features I've integrated into the app:
