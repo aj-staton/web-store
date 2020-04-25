@@ -18,5 +18,5 @@ To resolve all application dependancies:
  ## Execution
  To see this app for yourself there are two options (once dependancies have been resolved):
   * The first, is to execute `ionic serve` from the project directory. This __does not__ allow the use of native plugins.
-  * The second, is to execute `ionic cordova run browser`. This _does_ allow for the use of native plugins. 
+  * The second, is to execute `ionic cordova run browser`. This __does__ allow for the use of native plugins. 
  
