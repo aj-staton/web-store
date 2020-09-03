@@ -15,8 +15,10 @@ To resolve toolchain dependancies:
 To resolve all application dependancies:
  * Execute `npm install` in the directory within the `package-lock.json`.
  
- ## Execution
- Since this is not deployed, to see this app for yourself there are two options (once dependancies have been resolved):
-  * The first, is to execute `ionic serve` from the project directory. This __does not__ allow the use of native plugins.
-  * The second, is to execute `ionic cordova run browser`. This __does__ allow for the use of native plugins. 
- 
+## Execution
+Since this is not deployed, to see this app for yourself there are two options (once dependancies have been resolved):
+ * The first, is to execute `ionic serve` from the project directory. This __does not__ allow the use of native plugins.
+ * The second, is to execute `ionic cordova run browser`. This __does__ allow for the use of native plugins. 
+
+# UI
+![Screenshot](img/store-front.png)
